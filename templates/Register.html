@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .header {
+            width: 100%;
+            padding: 0.8em 2em; 
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, rgb(241, 225, 119), rgb(180, 67, 241));
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .register-container {
+            background: white;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            margin-top: 70px;
+        }
+        .register-container h2 {
+            margin-bottom: 1em;
+            font-weight: 600;
+        }
+        .input-group {
+            margin-bottom: 1.5em;
+            text-align: left;
+            position: relative;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.3em;
+        }
+        .input-group input {
+            color: #000;
+            font-size: 0.9rem;
+            background-color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            padding-inline: 0.5em;
+            padding-block: 0.7em;
+            border: 2px solid purple;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #800080;
+        }
+        .error {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        /* Button styling */
+        button {
+            background: linear-gradient(to right, rgb(241, 225, 119), rgb(180, 67, 241));
+            font-family: inherit;
+            padding: 0.6em 1.3em;
+            font-weight: 900;
+            font-size: 18px;
+            border: 2px solid black;
+            border-radius: 0.4em;
+            box-shadow: 0.1em 0.1em;
+            display: block;
+            width: 100%;
+            margin-top: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            transform: translate(-0.05em, -0.05em);
+            box-shadow: 0.15em 0.15em;
+        }
+        button:active {
+            transform: translate(0.05em, 0.05em);
+            box-shadow: 0.05em 0.05em;
+        }
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .register-container {
+                width: 90%;
+                padding: 1.5em;
+            }
+            .header {
+                font-size: 1.2rem;
+                padding: 0.8em 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Findzy</div>
+
+    <div class="register-container">
+        <h2>Register</h2>
+        <form id="register-form" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                {% if message %}
+                    <p class="block" id="password-error">{{message}}</p>
+                {% endif %}
+            </div>
+            <div class="input-group">
+                <label for="password">Create Password</label>
+                <input type="password" id="password" name="password" required>
+                <p class="error" id="password-error">Password must be 8+ characters, include 1 uppercase letter, 1 number, 1 special character.</p>
+            </div>
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+                <p class="error" id="confirm-error">Passwords do not match.</p>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p style="margin-top: 1em; font-size: 0.9rem;">
+            Already have an account? <a href="/users/login" style="color: purple; font-weight: bold; text-decoration: none;">Login</a>
+        </p>
+        <p style="margin-top: 1em; font-size: 0.9rem;">
+            <a href="register.html" style="color: rgb(253, 222, 21); font-weight: bold; text-decoration: underline;">Forgot Password</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementsByClassName("header")[0].onclick = function() {
+            window.location.href = "/";
+        };
+        
+        document.getElementById("register-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirm-password").value;
+            let passwordError = document.getElementById("password-error");
+            let confirmError = document.getElementById("confirm-error");
+
+            let passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])(?=.*[a-zA-Z\d]).{8,}$/;
+            
+            // Reset errors
+            passwordError.style.display = "none";
+            confirmError.style.display = "none";
+
+            if (!passwordPattern.test(password)) {
+                passwordError.style.display = "block";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                confirmError.style.display = "block";
+                return;
+            }
+
+            //alert("Registration successful!");
+            this.submit();
+        });
+    </script>
+</body>
+</html>

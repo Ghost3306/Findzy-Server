@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Findzy - Helping You Find Your Way</title>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fafafa; /* Light background */
+            color: #333;
+        }
+        header {
+            background-color: #ffffff; /* White background */
+            padding: 1em 2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #b443f1; /* Soft purple */
+            text-decoration: none;
+        }
+        nav a {
+            margin-left: 1.5em;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            background: linear-gradient(to right, rgba(180, 67, 241, 0.8), rgba(255, 190, 11, 0.8)), url('hero-image.jpg') center/cover no-repeat;
+            color: #fff;
+            text-align: center;
+            padding: 0 2em;
+        }
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+        }
+        .hero a {
+            background-color: #ffffff; /* White background */
+            color: #b443f1; /* Soft purple */
+            padding: 0.8em 1.5em;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .hero a:hover {
+            background-color: #b443f1; /* Soft purple */
+            color: #ffffff; /* White text */
+        }
+        .content {
+            padding: 4em 2em;
+            text-align: center;
+        }
+        .content h2 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+        .content p {
+            font-size: 1.1em;
+            margin-bottom: 2em;
+            color: #666;
+        }
+        .buttons a {
+            background-color: #b443f1; /* Soft purple */
+            color: #ffffff; /* White text */
+            padding: 0.8em 1.5em;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 0.5em;
+            transition: background-color 0.3s;
+        }
+        .buttons a:hover {
+            background-color: #f1e177; /* Soft yellow */
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em 2em;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">Findzy</a>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+ <section class="hero">
+        <div>
+            <h1>Reuniting You with Your Lost Items</h1>
+            <p>Findzy is a dedicated platform for reporting and recovering lost items on campus. Whether you've misplaced something or found someone else's belongings, we're here to help.</p>
+            <a href="#get-started" id="get-started-btn">Get Started</a>
+        </div>
+    </section>
+    <section class="content" id="get-started">
+        <h2>Welcome to Findzy</h2>
+        <p>Discover a seamless experience in finding your way around the college campus, ensuring you reach your destinations without hassle.</p>
+        <div class="buttons">
+            <a href="users/login">Login</a>
+            <a href="users/register">Register</a>
+        </div>
+    </section>
+    <footer>
+        &copy; 2025 Findzy. All rights reserved.
+    </footer>
+</body>
+</html>

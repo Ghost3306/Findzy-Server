@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .header {
+            width: 100%;
+            padding: 0.8em 2em; 
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, rgb(241, 225, 119), rgb(180, 67, 241));
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .forgot-container {
+            background: white;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            margin-top: 70px;
+        }
+
+        .forgot-container h2 {
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 1.2em;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.2em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.6em;
+            border: 2px solid orange;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, rgb(255, 94, 58), rgb(255, 190, 11));
+            font-family: inherit;
+            padding: 0.6em 1.3em;
+            font-weight: 900;
+            font-size: 18px;
+            border: 2px solid black;
+            border-radius: 0.4em;
+            box-shadow: 0.1em 0.1em;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            transform: translate(-0.05em, -0.05em);
+            box-shadow: 0.15em 0.15em;
+        }
+
+        .submit-btn:active {
+            transform: translate(0.05em, 0.05em);
+            box-shadow: 0.05em 0.05em;
+        }
+
+        .login-link {
+            margin-top: 1em;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: purple;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">Findzy</div>
+
+    <div class="forgot-container">
+        <h2>Forgot Password?</h2>
+        <p>Enter your email to reset your password.</p>
+        <form id="forgot-password-form" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+                {% if message %}
+                    <p style="color:green;">{{message}}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="submit-btn">Send Reset Link</button>
+        </form>
+        <p class="login-link">
+            Remember your password? <a href="/users/login">Login</a>
+        </p>
+    </div>
+
+   <script>
+    document.getElementsByClassName("header")[0].onclick = function() {
+        window.location.href = "/";
+    };
+       
+    </script> 
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Status</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .header {
+            width: 100%;
+            padding: 0.8em 2em;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, rgb(241, 225, 119), rgb(180, 67, 241));
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .message-container, .message-container-err {
+            background: white;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            margin-top: 70px;
+        }
+
+        .message-container h2 {
+            color: green;
+        }
+
+        .message-container-err h2 {
+            color: red;
+        }
+
+        .message-container p, .message-container-err p {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .home-btn {
+            background: linear-gradient(to right, rgb(241, 225, 119), rgb(180, 67, 241));
+            font-family: inherit;
+            padding: 0.6em 1.3em;
+            font-weight: 900;
+            font-size: 18px;
+            border: 2px solid black;
+            border-radius: 0.4em;
+            box-shadow: 0.1em 0.1em;
+            display: block;
+            width: 100%;
+            margin-top: 1em;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: translate(-0.05em, -0.05em);
+            box-shadow: 0.15em 0.15em;
+        }
+
+        .home-btn:active {
+            transform: translate(0.05em, 0.05em);
+            box-shadow: 0.05em 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Findzy</div>
+
+    {% if status == '200' %}
+        <div class="message-container">
+            <h2>{{ title }}</h2>
+            <p>{{ message }}</p>
+            <button class="home-btn" onclick="redirectToHome()">Go to Login</button>
+        </div>
+    {% else %}
+        <div class="message-container-err">
+            <h2>{{ title }}</h2>
+            <p>{{ message }}</p>
+            <button class="home-btn" onclick="redirectToHome()">Go to Login</button>
+        </div>
+    {% endif %}
+
+    <script>
+        document.getElementsByClassName("header")[0].onclick = function() {
+            window.location.href = "/";
+        };
+        function redirectToHome() {
+            window.location.href = "/";
+        }
+    </script>
+
+</body>
+</html>
