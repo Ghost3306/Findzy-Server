@@ -11,9 +11,23 @@ nlp = spacy.load("en_core_web_sm")
 nltk.download("punkt")
 nltk.download("stopwords")
 
-class StolenItem(models.Model):
+
+
+class ReportItem(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="stolen_items")
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=100)  
+    description = models.TextField()
+    stolen_datetime = models.DateTimeField()  
+    location = models.CharField(max_length=255)
+    location_description = models.TextField()  
+    keywords = models.TextField(blank=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class StolenItem(models.Model):
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="report_item")
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=100)  # User input instead of choices
     description = models.TextField()
@@ -23,20 +37,10 @@ class StolenItem(models.Model):
     keywords = models.TextField(blank=True)  # Stores extracted keywords
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def extract_keywords(self):
-       
-        doc = nlp(self.description)
-        extracted_keywords = set(token.text.lower() for token in doc if token.pos_ in ["NOUN", "PROPN"])
-        self.keywords = ", ".join(extracted_keywords)  # Store keywords as a comma-separated string
-        self.save()
+    
 
-@receiver(post_save, sender=StolenItem)
-def extract_keywords_on_save(sender, instance, **kwargs):
-    stop_words = set(stopwords.words("english"))
-    words = word_tokenize(instance.description.lower())  # Tokenize words
-    keywords = [word for word in words if word.isalnum() and word not in stop_words]
-    instance.extracted_keywords = ", ".join(keywords)
-    instance.save(update_fields=["extracted_keywords"])  # Avoid infinite loop
+    def __str__(self):
+        return f"{self.name} - {self.category} ({self.user.username})"
 
 class StolenItemImage(models.Model):
     stolen_item = models.ForeignKey(StolenItem, on_delete=models.CASCADE, related_name="item_images")
@@ -65,8 +69,7 @@ class StolenItemImage(models.Model):
 
         return sorted(matched_items, key=lambda x: x[1], reverse=True)  # Sort by highest match score
 
-    def __str__(self):
-        return f"{self.name} - {self.category} ({self.user.username})"
+    
 
 
 

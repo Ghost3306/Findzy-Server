@@ -430,7 +430,16 @@
                 <input type="text" id="name" name="name" required>
 
                 <label for="category">Category:</label>
-                <input type="text" id="category" name="category" required>
+                <select id="category" name="category" required>
+                    <option value="">Select a category</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="personal_items">Personal Items</option>
+                    <option value="books_stationery">Books & Stationery</option>
+                    <option value="bags_accessories">Bags & Accessories</option>
+                    <option value="vehicles">Vehicles</option>
+                    <option value="other">Other</option>
+                </select>
+
 
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" required></textarea>
@@ -445,7 +454,7 @@
                 <textarea id="location_description" name="location_description"></textarea>
 
                 <label for="image">Upload Image:</label>
-                <input type="file" id="image" name="image" accept="image/*">
+                <input type="file" id="image" name="image" accept="image/*" multiple>
 
                 <button type="submit" class="submit-btn">Submit</button>
             </form>
