@@ -209,7 +209,7 @@
             cursor: pointer;
         }
 
-        /* Modal Popup */
+        /* Modal Styling */
         .modal {
             display: none;
             position: fixed;
@@ -220,54 +220,98 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         .modal-content {
             background-color: white;
             width: 65%;
-            height: 65%;
+            max-width: 800px;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             border-radius: 10px;
-            padding: 20px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 1.5em;
             font-weight: bold;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
+            padding: 15px;
+            border-bottom: 2px solid #b443f1;
         }
-
         .close-btn {
             background-color: red;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
         }
-
         .close-btn:hover {
             background-color: darkred;
         }
-
+        
+        /* Added Padding to Modal Body */
         .modal-body {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            color: var(--text-color);
+            padding-right:20px;
+            margin:25px;
         }
+        
+        /* Form Grid Layout */
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 20px;
+            margin-top: 15px;
+        }
+        form label {
+            font-weight: bold;
+            grid-column: span 1;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            grid-column: span 2;
+            width: 40%;
+            background-color: #6a0dad;
+            color: white;
+            padding: 12px 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s ease-in-out;
+        }
+        .submit-btn:hover {
+            background-color: #4b0780;
+        }
+        
+        /* Full-width elements */
+        textarea {
+            grid-column: span 2;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+            form label, form input, form textarea, .submit-btn {
+                grid-column: span 1;
+            }
+        }
+                    
+
     </style>
 </head>
 <body>
@@ -282,9 +326,9 @@
 </header>
 
 <div class="action-row">
-    <button onclick="openModal('Add Report')">Add Report</button>
-    <button onclick="openModal('Add Stolen')">Add Stolen</button>
-    <button onclick="openModal('Search Query')">Search Query</button>
+    <button onclick="openModal('report')">Add Report</button>
+    <button onclick="openModal('stolen')">Add Stolen</button>
+    <button onclick="openModal('search')">Search Query</button>
 </div>
 <main class="container">
     <div class="box">
@@ -360,17 +404,72 @@
 </main>
 
 <!-- Modal (Popup) -->
-<div id="popup-modal" class="modal">
+<div id="popup-modal-report" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <span id="modal-title">Modal Title</span>
+            <span id="modal-title">Add Report Item</span>
             <button class="close-btn" onclick="closeModal()">X</button>
         </div>
         <div class="modal-body">
-            <p>Form fields go here...</p>
+            
         </div>
     </div>
 </div>
+
+
+<div id="popup-modal-stolen" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span id="modal-title">Add Stolen Item</span>
+            <button class="close-btn" onclick="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <form id="stolen-item-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="name">Item Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="stolen_datetime">Stolen Date & Time:</label>
+                <input type="datetime-local" id="stolen_datetime" name="stolen_datetime" required>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+
+                <label for="location_description">Location Description:</label>
+                <textarea id="location_description" name="location_description"></textarea>
+
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="popup-modal-search" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span id="modal-title">Search Query</span>
+            <button class="close-btn" onclick="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
 <script>
     function logout() {
@@ -383,14 +482,15 @@
         accordion.classList.toggle("open");
     }
 
-    function openModal(title) {
-        document.getElementById("modal-title").innerText = title;
-        document.getElementById("popup-modal").style.display = "block";
-    }
+    function openModal(type) {
+    document.getElementById(`popup-modal-${type}`).style.display = "block";
+}
 
-    function closeModal() {
-        document.getElementById("popup-modal").style.display = "none";
-    }
+function closeModal() {
+    document.querySelectorAll(".modal").forEach(modal => modal.style.display = "none");
+}
+
+    
 </script>
 
 </body>

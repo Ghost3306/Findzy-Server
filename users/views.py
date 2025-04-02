@@ -39,7 +39,7 @@ def login_user(request):
         user_obj = authenticate(username=username,password=password)
         if user_obj:
             login(request,user_obj)
-            return redirect('/users/home')
+            return redirect('/dashboard/home')
         return render(request,'login.html',{'message','Invalid credentials!'})
 
     return render(request,'login.html')
@@ -124,6 +124,3 @@ def launchforgot(request):
 
     return render(request,'forgot.html')                
        
-
-def dashboard(request):
-    return render(request,'dashboard.html')
