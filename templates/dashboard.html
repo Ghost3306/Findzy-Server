@@ -208,6 +208,66 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* Modal Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 65%;
+            height: 65%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .close-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: darkred;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: var(--text-color);
+        }
     </style>
 </head>
 <body>
@@ -216,17 +276,16 @@
     <a href="#" class="logo">Findzy</a>
     <div class="header-links">
         <a href="contact.html">Contact</a>
-        <span class="hello-user">Hello, {{request.user.first_name}}</span>
+        <span class="hello-user">Hello, {{ request.user.first_name }}</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 </header>
 
 <div class="action-row">
-    <button>Add Report</button>
-    <button>Add Stolen</button>
-    <button>Search Query</button>
+    <button onclick="openModal('Add Report')">Add Report</button>
+    <button onclick="openModal('Add Stolen')">Add Stolen</button>
+    <button onclick="openModal('Search Query')">Search Query</button>
 </div>
-
 <main class="container">
     <div class="box">
         <h3>Your Reports</h3>
@@ -300,17 +359,37 @@
     </div>
 </main>
 
+<!-- Modal (Popup) -->
+<div id="popup-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span id="modal-title">Modal Title</span>
+            <button class="close-btn" onclick="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <p>Form fields go here...</p>
+        </div>
+    </div>
+</div>
+
 <script>
-    document.getElementsByClassName("header")[0].onclick = function() {
-        window.location.href = "/users/home";
-    };
     function logout() {
         alert("Logging out...");
         window.location.href = "/users/logout";
     }
+
     function toggleAccordion(header) {
         let accordion = header.parentElement;
         accordion.classList.toggle("open");
+    }
+
+    function openModal(title) {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("popup-modal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("popup-modal").style.display = "none";
     }
 </script>
 
