@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from dashboard.models import StolenItem,StolenItemImage
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import spacy
 import nltk
+from dashboard.models import StolenItem,ReportItem
 from django.dispatch import receiver
 nlp = spacy.load("en_core_web_sm")
 nltk.download("punkt")
@@ -38,6 +39,42 @@ def dashboard(request):
             for image in images:
                 st_img = StolenItemImage(stolen_item=st_obj,image=image)
                 st_img.save()
+
+        if 'reportname' in request.POST:
+            name = request.POST.get("reportname")
+            category = request.POST.get("category")
+            description = request.POST.get("description")
+            stolen_datetime = request.POST.get("stolen_datetime")
+            location = request.POST.get("location")
+      
+            doc = nlp(f"{description.lower()} {location}")
+            extracted_keywords = set(token.text.lower() for token in doc if token.pos_ in ["NOUN", "PROPN"])
+
             
+            word_str = ", ".join(extracted_keywords)
+            re_obj = ReportItem(name=name, user =request.user,category=category,description=description,stolen_datetime=stolen_datetime,keywords=word_str,location=location)
+            
+            re_obj.save()
+
+        if "sname" in request.POST:
+            search = request.POST.get("sname")
+            return redirect(f"/dashboard/search/{search}")
+            
+
+
+    stolen = StolenItem.objects.filter(user=request.user)
+    report = ReportItem.objects.filter(user=request.user)
+    print(len(stolen))
+    for st in stolen:
+        print(st.name)
+    data = {
+        'items':stolen,
+        'reports':report
+    }   
            
-    return render(request,'dashboard.html')
+    return render(request,'dashboard.html',context=data)
+
+def searchquery(request,query):
+    stolen_item= StolenItem.objects.filter(name__icontains=query)
+    
+    return render(request,'searchquery.html',{'searches':stolen_item})
