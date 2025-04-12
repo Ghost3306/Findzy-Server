@@ -40,6 +40,17 @@ def dashboard(request):
                 st_img = StolenItemImage(stolen_item=st_obj,image=image)
                 st_img.save()
 
+            stolen = StolenItem.objects.filter(user=request.user)
+            report = ReportItem.objects.filter(user=request.user)
+            data = {
+            'items':stolen,
+            'reports':report,
+            'message':"msg1",
+            'msg':"success"
+            }   
+           
+            return render(request,'dashboard.html',context=data)
+
         if 'reportname' in request.POST:
             name = request.POST.get("reportname")
             category = request.POST.get("category")
@@ -55,6 +66,18 @@ def dashboard(request):
             re_obj = ReportItem(name=name, user =request.user,category=category,description=description,stolen_datetime=stolen_datetime,keywords=word_str,location=location)
             
             re_obj.save()
+            stolen = StolenItem.objects.filter(user=request.user)
+            report = ReportItem.objects.filter(user=request.user)
+            data = {
+            'items':stolen,
+            'reports':report,
+            'message':"msg",
+            'msg':"success"
+            }   
+           
+            return render(request,'dashboard.html',context=data)
+
+
             
 
         if "sname" in request.POST:
@@ -76,7 +99,7 @@ def dashboard(request):
     data = {
         'items':stolen,
         'reports':report,
-        'message':"success"
+        'msg':"success"
     }   
            
     return render(request,'dashboard.html',context=data)
@@ -110,3 +133,14 @@ def delete_report(request,id):
         obj.delete()
         return redirect("/dashboard/home")
     return render(request,'delete.html',{'data':obj})
+
+
+def get_card(request,uid):
+    if request.user.is_authenticated:
+        obj = StolenItem.objects.get(uid=uid)
+        context = {
+            'item':obj
+        }
+        return render(request,'card.html',context)
+    else:
+        return redirect('/users/login')

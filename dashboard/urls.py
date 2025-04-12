@@ -8,5 +8,6 @@ urlpatterns = [
     path('search/<query>',views.searchquery),
     path('searchdes/<query>',views.searchdescr),
     path('delete/<id>',views.delete_stolen),
-    path('deletere/<id>',views.delete_report)   
+    path('deletere/<id>',views.delete_report),
+    path('view/<uid>',views.get_card)   
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

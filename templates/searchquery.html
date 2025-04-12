@@ -451,7 +451,7 @@
         </div>
     </header>
     <div class="card-container">
-
+        {% if searches %}
         {% for s in searches %}
         <div class="card">
             {% with s.item_images.first as img %}
@@ -464,7 +464,7 @@
             {% endwith %}
 
             <div class="card-content">
-                <h2 class="card-title">{{s.name}}</h2>
+                <h2 class="card-title"><a href="/dashboard/view/{{s.uid}}">{{s.name}}</a></h2>
                 <p class="card-description">{{s.description}}</p>
                 <button class="card-button">Learn More</button>
             </div>
@@ -472,6 +472,9 @@
 
         </div>
         {% endfor %}
+        {% else %}
+            <h4>No results found!</h4>
+        {% endif %}
        
     </div>
 </body>

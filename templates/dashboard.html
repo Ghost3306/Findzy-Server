@@ -301,6 +301,22 @@
             grid-column: span 2;
         }
         
+        .modal-body button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            }
+
+            .modal-body button:hover {
+            background-color: #0056b3;
+            }
+
         /* Responsive Design */
         @media (max-width: 600px) {
             form {
@@ -484,28 +500,43 @@
             <button class="close-btn" onclick="closeModal()">X</button>
         </div>
         <div class="modal-body">
-            <div class="des">
-                <form method="post">
-                    {% csrf_token %}
-                    <label for="">Search by description :</label>
-                    <textarea name="sdes" id=""></textarea>
-                    <button type="submit">Search</button>
-                </form>
+            <button onclick="showDiv('des')">Search by Description</button>
+            <button onclick="showDiv('name')">Search by Name</button>
+          
+            <div class="des" style="display: none;">
+              <form method="post">
+                {% csrf_token %}
+                <label>Search by description :</label>
+                <textarea name="sdes"></textarea>
+                <button type="submit">Search</button>
+              </form>
             </div>
-            <div class="name">
-                <form method="post">
-                    {% csrf_token %}
-                    <label for="">Search by name :</label>
-                    <textarea name="sname" id=""></textarea>
-                    <button type="submit">Search</button>
-                </form>
+          
+            <div class="name" style="display: none;">
+              <form method="post">
+                {% csrf_token %}
+                <label>Search by name :</label>
+                <textarea name="sname"></textarea>
+                <button type="submit">Search</button>
+              </form>
             </div>
-        </div>
+          </div>
+          
     </div>
 </div>
+{% if message == "msg" %}
+<script>
+  alert("Reported submited successfully")
+</script>
+{% endif %}
 
+{% if message == "msg1" %}
+<script>
+  alert("Found Report submited successfully")
+</script>
+{% endif %}
 
-{% if message == "success" %}
+{% if msg == "success" %}
 <script>
   document.getElementById("stolen-form").reset();  // Clears the form
 </script>
@@ -514,6 +545,12 @@
 
 
 <script>
+    function showDiv(divClass) {
+  document.querySelector('.des').style.display = 'none';
+  document.querySelector('.name').style.display = 'none';
+  document.querySelector('.' + divClass).style.display = 'block';
+}
+
     function logout() {
         alert("Logging out...");
         window.location.href = "/users/logout";
