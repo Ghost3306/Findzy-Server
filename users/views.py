@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from users.models import Profile
+from users.functions import send_forgot_mail
 
 def homepage(request):
     return render(request,'homepage.html')
@@ -118,9 +119,17 @@ def forgotpass(request,email_token):
 def launchforgot(request):
     if request.method=='POST':
         email = request.POST.get('email')
-        print(email)
+        
         #send email here
-        return render(request,'forgot.html',{'message':'Reset password link sent to you'})  
-
+        try:
+            obj = User.objects.get(email=email)
+            print(len(obj))
+            profile = Profile.objects.get(user=obj)
+            print(profile.email_token,obj.email)
+            send_forgot_mail(obj.email,profile.email_token)
+            return render(request,'forgot.html',{'message':'Reset password link sent to you'})  
+        except: 
+            return render(request,'forgot.html',{'message':'Please enter correct email!'})  
+       
     return render(request,'forgot.html')                
        

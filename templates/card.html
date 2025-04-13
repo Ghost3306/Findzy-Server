@@ -125,10 +125,10 @@
               <p><small>Reported on {{ item.created_at|date:"F d, Y" }}</small></p>
           
               <div class="clearfix mt-4 pt-2 border-top">
-                <form method="POST" action="/send-message/">
+                <form id="msg-form" method="POST" >
                   {% csrf_token %}
                   <p>Send direct message to reported user : </p>
-                  <input type="hidden" name="receiver_uid" value="{{ item.profile.uid }}">
+                  <!-- <input type="hidden" name="receiver_uid" value="{{ item.profile.uid }}"> -->
                   <textarea name="message" class="form-control mb-2" rows="2" placeholder="Type message..." required></textarea>
                   <button type="submit" class="btn btn-primary btn-sm">Send</button>
                 </form>
@@ -143,6 +143,14 @@
 
 
   </div>
+
+  
+{% if msg == "success" %}
+<script>
+  document.getElementById("msg-form").reset();  
+   alert("Message sent succesfully")
+</script>
+{% endif %}
 
   <script>
      function logout() {

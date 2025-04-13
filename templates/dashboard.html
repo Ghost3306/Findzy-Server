@@ -160,7 +160,7 @@
             transition: max-height 0.4s ease-out, padding 0.3s ease-out;
         }
         .accordion.open .accordion-content {
-            max-height: 200px;
+            max-height: 230px;
             padding: 15px;
         }
         .accordion-header span {
@@ -377,6 +377,11 @@
                 <span>▶</span>
             </div>
             <div class="accordion-content">
+                {% with item.item_images.first as img %}
+                    {% if img %}     
+                    <img src="{{ img.image.url }}" alt="{{ item.name }}" style="width:120px; height:auto; display:block; margin-bottom:5px;">
+                    {% endif %}
+                {% endwith %}
                 <p><strong>Stolen Date:</strong> {{item.stolen_datetime}}</p>
                 <p><strong>Description:</strong> {{item.description}}</p>
                 <a href="/dashboard/delete/{{item.uid}}" class="edit-link">Delete</a>
@@ -389,24 +394,33 @@
 
     <div class="box messages">
         <h3>Your Messages</h3>
-        <!-- <div class="message-box">This is your message</div>
-        <div class="reply-box">
-            <input type="text" placeholder="Reply...">
-            <button>➤</button>
-        </div> -->
+        {% for msg in messages %}
         <div class="accordion">
             <div class="accordion-header" onclick="toggleAccordion(this)">
-                This is your message
+               
+                <p>From : {{msg.sender.first_name}} <br>Message : {{msg.body}} <br>For : {{msg.item.name}}</p>
                 <span>▶</span>
             </div>
             <div class="accordion-content">
-                <input type="text" placeholder="Reply...">
-                <button>➤</button>
+                <form class="msg" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item" value="{{ msg.item.uid }}">
+                    <input type="hidden" name="receiver_uid" value="{{ msg.sender.email }}">
+                    <input type="text" name="msg_reply" placeholder="Reply..." required>
+                    <button type="submit">➤</button>
+                </form>
             </div>
         </div>
+        {% endfor %}
     </div>
 </main>
-
+  
+{% if msg == "su" %}
+<script>
+  document.getElementById("msg-form").reset();  
+   alert("Message sent succesfully")
+</script>
+{% endif %}
 <!-- Modal (Popup) -->
 <div id="popup-modal-report" class="modal">
     <div class="modal-content">
@@ -538,19 +552,30 @@
 
 {% if msg == "success" %}
 <script>
-  document.getElementById("stolen-form").reset();  // Clears the form
+  document.getElementById("stolen-item-form").reset();  // Clears the form
+  document.getElementById("stolen-item-form").reset();  // Clears the form
+  document.getElementsByClassName('msg').reset();
 </script>
 {% endif %}
 
 
 
 <script>
+
     function showDiv(divClass) {
   document.querySelector('.des').style.display = 'none';
   document.querySelector('.name').style.display = 'none';
   document.querySelector('.' + divClass).style.display = 'block';
 }
 
+function resetAllForms() {
+  const forms = document.forms;
+  for (let i = 0; i < forms.length; i++) {
+    forms[i].reset();
+  }
+}
+
+window.addEventListener('load', resetAllForms);
     function logout() {
         alert("Logging out...");
         window.location.href = "/users/logout";

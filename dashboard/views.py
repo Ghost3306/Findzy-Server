@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
 from dashboard.models import StolenItem,StolenItemImage
+from django.contrib.auth.models import User
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import spacy
 import nltk
-from dashboard.models import StolenItem,ReportItem,Match
+from dashboard.models import StolenItem,ReportItem,Message
 from django.dispatch import receiver
 nlp = spacy.load("en_core_web_sm")
 nltk.download("punkt")
@@ -42,10 +43,12 @@ def dashboard(request):
 
             stolen = StolenItem.objects.filter(user=request.user)
             report = ReportItem.objects.filter(user=request.user)
+            messages = Message.objects.filter(receiver=request.user)
             data = {
             'items':stolen,
             'reports':report,
             'message':"msg1",
+            'messages':messages,
             'msg':"success"
             }   
            
@@ -68,16 +71,37 @@ def dashboard(request):
             re_obj.save()
             stolen = StolenItem.objects.filter(user=request.user)
             report = ReportItem.objects.filter(user=request.user)
+            messages = Message.objects.filter(receiver=request.user)
             data = {
             'items':stolen,
             'reports':report,
             'message':"msg",
+            'messages':messages,
             'msg':"success"
             }   
            
             return render(request,'dashboard.html',context=data)
 
-
+        if "receiver_uid" in request.POST:
+            rec_email = request.POST.get('receiver_uid')
+            reply = request.POST.get('msg_reply')
+            item = request.POST.get('item')
+            st_item = StolenItem.objects.get(uid=item)
+            receiver = User.objects.get(email=rec_email)
+            print(reply,item)
+            msg_obj = Message(receiver=receiver,sender=request.user,body=reply,item=st_item)
+            msg_obj.save()
+            stolen = StolenItem.objects.filter(user=request.user)
+            report = ReportItem.objects.filter(user=request.user)
+            messages = Message.objects.filter(receiver=request.user)
+            data = {
+            'items':stolen,
+            'reports':report,
+            'messages':messages,
+            'msg':"su"
+            }   
+           
+            return render(request,'dashboard.html',context=data)
             
 
         if "sname" in request.POST:
@@ -86,19 +110,15 @@ def dashboard(request):
 
         if "sdes" in request.POST:
             search = request.POST.get("sdes")
-            mat = Match(query=search)
-            mat.save()
             return redirect(f"/dashboard/searchdes/{search}")
-            #return redirect(f"/dashboard/searchdes/{mat.uid}")
 
     stolen = StolenItem.objects.filter(user=request.user)
     report = ReportItem.objects.filter(user=request.user)
-    # print(len(stolen))
-    # for st in stolen:
-    #     print(st.name)
+    messages = Message.objects.filter(receiver=request.user)
     data = {
         'items':stolen,
         'reports':report,
+        'messages':messages,
         'msg':"success"
     }   
            
@@ -110,7 +130,6 @@ def searchquery(request,query):
     return render(request,'searchquery.html',{'searches':stolen_item})
 
 def searchdescr(request,query):
-   # se = Match.objects.get(query=query)
     obj = StolenItem.find_matching_items(query)
     print("in search",obj)
     for i in obj:
@@ -141,6 +160,23 @@ def get_card(request,uid):
         context = {
             'item':obj
         }
+        if "message" in request.POST:
+            message = request.POST.get("message")
+            stolen_item = StolenItem.objects.get(uid=uid)
+            receiver = stolen_item.user
+            sender = request.user
+            msg = Message(sender=sender,receiver=receiver,item=stolen_item,body=message)
+            msg.save()
+            data = {
+            'msg':"success",
+            'item':obj
+            }   
+           
+            return render(request,'card.html',context=data)
+
         return render(request,'card.html',context)
+
+        
     else:
         return redirect('/users/login')
+    
