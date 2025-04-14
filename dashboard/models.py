@@ -27,20 +27,19 @@ class ReportItem(models.Model):
 
 
 
-# @receiver(post_save, sender=ReportItem)
-# def check_matching(sender, instance, created, **kwargs):
-#     print('report receive')
+@receiver(post_save, sender=ReportItem)
+def check_matching(sender, instance, created, **kwargs):
+    print('report receive')
 
-#     qu = instance.description+instance.location
-#     obj = StolenItem.find_matching_items(qu)
-#     ui = uuid.uuid4()
-#     for o in obj:
-#         print(o.uid)
-#         #mat = Match(uid=ui,item=o)
-#         #mat.save()
+    qu = instance.description+instance.location
+    obj = StolenItem.find_matching_items(qu)
+    ui = uuid.uuid4()
+    msg = "We may have found items matching your lost report!\n\nPlease check the following links to see if any of them belong to you:\n\n"
+    for o in obj:
+        msg += f"🔗 http://127.0.0.1:8000/dashboard/view/{o.uid}\n"
+    msg += "\nIf any of these items are yours, kindly follow the instructions on the page to claim them."
+    send_match_result(instance.user.email, msg)
 
-#         pass
-#     send_match_result(instance.user.email,uid=ui)
 
 class StolenItem(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

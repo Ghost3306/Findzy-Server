@@ -43,7 +43,7 @@ def dashboard(request):
 
             stolen = StolenItem.objects.filter(user=request.user)
             report = ReportItem.objects.filter(user=request.user)
-            messages = Message.objects.filter(receiver=request.user)
+            messages = Message.objects.filter(receiver=request.user).order_by("-created_at")[:10]
             data = {
             'items':stolen,
             'reports':report,
@@ -71,7 +71,7 @@ def dashboard(request):
             re_obj.save()
             stolen = StolenItem.objects.filter(user=request.user)
             report = ReportItem.objects.filter(user=request.user)
-            messages = Message.objects.filter(receiver=request.user)
+            messages = Message.objects.filter(receiver=request.user).order_by("-created_at")[:10]
             data = {
             'items':stolen,
             'reports':report,
@@ -93,7 +93,7 @@ def dashboard(request):
             msg_obj.save()
             stolen = StolenItem.objects.filter(user=request.user)
             report = ReportItem.objects.filter(user=request.user)
-            messages = Message.objects.filter(receiver=request.user)
+            messages = Message.objects.filter(receiver=request.user).order_by("-created_at")[:10]
             data = {
             'items':stolen,
             'reports':report,
@@ -114,7 +114,7 @@ def dashboard(request):
 
     stolen = StolenItem.objects.filter(user=request.user)
     report = ReportItem.objects.filter(user=request.user)
-    messages = Message.objects.filter(receiver=request.user)
+    messages = Message.objects.filter(receiver=request.user).order_by("-created_at")[:10]
     data = {
         'items':stolen,
         'reports':report,

@@ -1,39 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Findzy - Helping You Find Your Way</title>
+    {% load static %}
+
+    <link rel="icon" type="image/jpeg" href="{% static 'findzy_logo2x.png' %}">
+
     <style>
         html {
             scroll-behavior: smooth;
+            overflow-y: scroll;
+            /* To ensure vertical scrolling works */
+            -ms-overflow-style: none;
+            /* For Internet Explorer */
+            scrollbar-width: none;
         }
+
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background-color: #fafafa; /* Light background */
+            background-color: #fafafa;
+            /* Light background */
             color: #333;
+            overflow: hidden;
+            /* To ensure vertical scrolling works */
+
         }
+
+        section {
+            padding-top: 80px;
+            /* Adjust based on your header height */
+            scroll-margin-top: 80px;
+            /* Ensure scrolling works with the correct gap */
+        }
+
         header {
-            background-color: #ffffff; /* White background */
-            padding: 1em 2em;
+            background-color: #ffffff;
+            padding: 0em 2em;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 96%;
+            z-index: 1000;
+            height: 4em;
         }
-        .logo {
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+
+        .logo-container svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        .logo-container h1 {
+            font-size: 1.5em;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .logo{
+            margin-top: 0.1em;
+        }
+
+        .title {
             font-size: 1.5em;
             font-weight: bold;
-            color: #b443f1; /* Soft purple */
+            color: #b443f1;
+
             text-decoration: none;
         }
+
+        nav {
+
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
         nav a {
             margin-left: 1.5em;
             text-decoration: none;
-            color: #333;
-            font-weight: 500;
+            color: #F9C24A;
+            font-weight: bolder;
+            font-family: 'poppins';
+            font-size: large;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+
         }
+
+        /* nav a:active {
+            background-color: #b443f1;
+            height: 100%;
+            
+            color: white;
+            border-radius: 5px;
+        } 
+
+        .nav-link {
+            background-color: transparent;
+            color: #333;
+        } */
+
+
+        :has(#hero:target) #link-home,
+        :has(#about:target) #link-about,
+        :has(#contact:target) #link-contact {
+            background-color: #b443f1;
+            color: #fff;
+        }
+
+        /* body:has(#hero:target) #link-home {
+            background-color: #b443f1;
+            color: #fff;
+        }
+
+        
+        :has(#about:target) #link-about {
+            background-color: #b443f1;
+            color: #fff;
+        }
+
+       
+        :has(#contact:target) #link-contact {
+            background-color: #b443f1;
+            color: #fff;
+        } */
+
+        /* When Home is targeted explicitly */
+        /* :has(#hero:target) #link-home {
+            background-color: #b443f1;
+            color: #fff;
+        } */
+
         .hero {
             display: flex;
             justify-content: center;
@@ -44,43 +155,57 @@
             text-align: center;
             padding: 0 2em;
         }
+
         .hero h1 {
             font-size: 3em;
             margin-bottom: 0.5em;
         }
+
         .hero p {
             font-size: 1.2em;
             margin-bottom: 1em;
         }
+
         .hero a {
-            background-color: #ffffff; /* White background */
-            color: #b443f1; /* Soft purple */
+            background-color: #ffffff;
+            /* White background */
+            color: #b443f1;
+            /* Soft purple */
             padding: 0.8em 1.5em;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
             transition: background-color 0.3s, color 0.3s;
         }
+
         .hero a:hover {
-            background-color: #b443f1; /* Soft purple */
-            color: #ffffff; /* White text */
+            background-color: #b443f1;
+            /* Soft purple */
+            color: #ffffff;
+            /* White text */
         }
+
         .content {
             padding: 4em 2em;
             text-align: center;
         }
+
         .content h2 {
             font-size: 2.5em;
             margin-bottom: 0.5em;
         }
+
         .content p {
             font-size: 1.1em;
             margin-bottom: 2em;
             color: #666;
         }
+
         .buttons a {
-            background-color: #b443f1; /* Soft purple */
-            color: #ffffff; /* White text */
+            background-color: #b443f1;
+            /* Soft purple */
+            color: #ffffff;
+            /* White text */
             padding: 0.8em 1.5em;
             border-radius: 5px;
             text-decoration: none;
@@ -88,9 +213,60 @@
             margin: 0 0.5em;
             transition: background-color 0.3s;
         }
+
         .buttons a:hover {
-            background-color: #f1e177; /* Soft yellow */
+            background-color: #f1e177;
+            /* Soft yellow */
         }
+
+        .about,
+        .contact {
+            padding: 5em 2em;
+            text-align: center;
+            background-color: #f5f0fb;
+            /* Soft lavender with enough contrast */
+            border-top: 4px solid #b443f1;
+            /* Subtle purple accent line */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+            margin: 3em 1em;
+        }
+
+        .about h2,
+        .contact h2 {
+            font-size: 2.5em;
+            color: #b443f1;
+            margin-bottom: 0.5em;
+        }
+
+        .about p,
+        .contact p {
+            font-size: 1.1em;
+            color: #444;
+            max-width: 700px;
+            margin: 0 auto 2em auto;
+            line-height: 1.6;
+        }
+
+        .contact {
+            background-color: #fff9ed;
+            /* Soft warm contrast */
+            border-top: 4px solid #ffbe0b;
+            /* Yellow accent line */
+        }
+
+        .contact a {
+            color: #b443f1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact a:hover {
+            text-decoration: underline;
+        }
+
+        
+
         footer {
             background-color: #333;
             color: #fff;
@@ -100,32 +276,104 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
-        <a href="/" class="logo">Findzy</a>
+        <div class="logo-container">
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 80 80" fill="none">
+                <path
+                    d="M28.096 34.5116V44.5013C28.096 44.7994 28.0828 45.0982 28.1211 45.3938C28.2131 46.103 28.6176 47.4072 30.3505 47.3778C31.1765 47.3638 31.6727 47.0913 31.9671 46.7334C32.7602 45.7693 32.3345 44.3192 32.3345 43.0708V34.5116C32.3345 34.3129 32.4956 34.1518 32.6944 34.1518H34.4589C35.6763 34.1518 36.6632 33.1648 36.6632 31.9474C36.6632 30.73 35.6763 29.7431 34.4589 29.7431H32.6944C32.4956 29.7431 32.3345 29.5819 32.3345 29.3832V27.7078C32.3345 27.0344 32.8643 26.48 33.5371 26.4495L34.1942 26.4197C35.3737 26.3662 36.3025 25.3944 36.3025 24.2137C36.3025 22.9941 35.3138 22.0054 34.0942 22.0054H32.5946C30.1101 22.0054 28.096 24.0195 28.096 26.504V29.3832C28.096 29.5819 27.9348 29.7431 27.7361 29.7431H26.6028C25.3854 29.7431 24.3985 30.73 24.3985 31.9474C24.3985 33.1648 25.3854 34.1518 26.6028 34.1518H27.7361C27.9348 34.1518 28.096 34.3129 28.096 34.5116Z"
+                    fill="url(#paint0_linear_143_5)" />
+                <path
+                    d="M44.7944 33.6119H39.8376C39.1648 33.6119 38.4561 33.6247 37.8854 33.2682C37.4577 33.0011 37.042 32.5334 37.024 31.7225C37.0135 31.2527 37.1352 30.8802 37.3198 30.5865C37.9801 29.5361 39.4529 29.5631 40.6936 29.5631H50.3394C51.6644 29.5631 52.4287 31.0676 51.6474 32.1377L43.8161 42.863C43.7293 42.9819 43.8142 43.1491 43.9614 43.1491H50.6012C51.769 43.1491 52.7156 44.0957 52.7156 45.2634C52.7156 46.4312 51.769 47.3778 50.6012 47.3778H38.9498C37.4934 47.3778 36.6403 45.738 37.4762 44.5455L44.9418 33.8951C45.0254 33.7759 44.9401 33.6119 44.7944 33.6119Z"
+                    fill="url(#paint1_linear_143_5)" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M38.1963 8.05955C21.6611 8.28542 7.79015 21.8126 8.61671 38.2905C9.40395 53.9844 22.448 65.4073 38.1963 65.6423C54.2047 65.8811 67.9629 54.2476 68.6778 38.2905C69.5157 19.5861 56.6024 7.80812 38.1963 8.05955ZM17.4545 38.2905C15.8139 26.0972 25.8679 14.7976 38.1963 14.5376C50.7589 14.2727 61.5105 25.8655 59.84 38.2905C58.3712 49.2148 49.2416 56.6969 38.1963 56.465C27.418 56.2388 18.8889 48.9506 17.4545 38.2905Z"
+                    fill="url(#paint2_linear_143_5)" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M40.1803 74.9995C21.0036 75.0981 5.45311 59.9372 5.00943 40.8097C4.55539 21.2358 20.556 4.89957 40.1803 5.00046C59.7063 5.10085 75.4423 21.3339 74.9905 40.8097C74.5492 59.8368 59.2564 74.9014 40.1803 74.9995ZM7.89525 40.8097C8.33852 58.3468 22.5973 72.2189 40.1803 72.1204C57.6626 72.0224 71.664 58.2463 72.1047 40.8097C72.5568 22.9243 58.1127 7.98008 40.1803 7.8796C22.1497 7.77858 7.44069 22.8263 7.89525 40.8097Z"
+                    fill="url(#paint3_linear_143_5)" />
+                <defs>
+                    <linearGradient id="paint0_linear_143_5" x1="46.3892" y1="22.7229" x2="30.8546" y2="49.1476"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0.193269" stop-color="#C972E0" />
+                        <stop offset="0.404807" stop-color="#E29B95" stop-opacity="0.7" />
+                        <stop offset="0.481731" stop-color="#E29B95" />
+                        <stop offset="0.698077" stop-color="#E29B95" stop-opacity="0.8" />
+                        <stop offset="0.788462" stop-color="#F9C24A" stop-opacity="0.8" />
+                        <stop offset="0.981731" stop-color="#F9C24A" />
+                    </linearGradient>
+                    <linearGradient id="paint1_linear_143_5" x1="53.9803" y1="9.6841" x2="17.187" y2="66.6091"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0.193269" stop-color="#C972E0" />
+                        <stop offset="0.404807" stop-color="#E29B95" stop-opacity="0.7" />
+                        <stop offset="0.481731" stop-color="#E29B95" />
+                        <stop offset="0.698077" stop-color="#E29B95" stop-opacity="0.8" />
+                        <stop offset="0.788462" stop-color="#F9C24A" stop-opacity="0.8" />
+                        <stop offset="0.981731" stop-color="#F9C24A" />
+                    </linearGradient>
+                    <linearGradient id="paint2_linear_143_5" x1="57.8465" y1="6.97941" x2="12.3595" y2="74.3771"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0.193269" stop-color="#C972E0" />
+                        <stop offset="0.404807" stop-color="#E29B95" stop-opacity="0.7" />
+                        <stop offset="0.481731" stop-color="#E29B95" />
+                        <stop offset="0.698077" stop-color="#E29B95" stop-opacity="0.8" />
+                        <stop offset="0.788462" stop-color="#F9C24A" stop-opacity="0.8" />
+                        <stop offset="0.981731" stop-color="#F9C24A" />
+                    </linearGradient>
+                    <linearGradient id="paint3_linear_143_5" x1="57.8465" y1="6.97941" x2="12.3595" y2="74.3771"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0.193269" stop-color="#C972E0" />
+                        <stop offset="0.404807" stop-color="#E29B95" stop-opacity="0.7" />
+                        <stop offset="0.481731" stop-color="#E29B95" />
+                        <stop offset="0.698077" stop-color="#E29B95" stop-opacity="0.8" />
+                        <stop offset="0.788462" stop-color="#F9C24A" stop-opacity="0.8" />
+                        <stop offset="0.981731" stop-color="#F9C24A" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <a href="/" class="title">Findzy</a>
+        </div>
         <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+            <a href="#hero" class="nav-link" id="link-home">Home</a>
+            <a href="#about" class="nav-link" id="link-about">About</a>
+            <a href="#contact" class="nav-link" id="link-contact">Contact</a>
         </nav>
     </header>
- <section class="hero">
+    <section class="hero" id="hero">
         <div>
             <h1>Reuniting You with Your Lost Items</h1>
-            <p>Findzy is a dedicated platform for reporting and recovering lost items on campus. Whether you've misplaced something or found someone else's belongings, we're here to help.</p>
+            <p>Findzy is a dedicated platform for reporting and recovering lost items on campus. Whether you've
+                misplaced something or found someone else's belongings, we're here to help.</p>
             <a href="#get-started" id="get-started-btn">Get Started</a>
+        </div>
+    </section>
+    <section class="about" id="about">
+        <div>
+            <h2>About Findzy</h2>
+            <p>Our mission is to make it easier for students to report lost items and help return them to their rightful
+                owners. We aim to create a reliable lost-and-found network on campus.</p>
         </div>
     </section>
     <section class="content" id="get-started">
         <h2>Welcome to Findzy</h2>
-        <p>Discover a seamless experience in finding your way around the college campus, ensuring you reach your destinations without hassle.</p>
+        <p>Discover a seamless experience in finding your way around the college campus, ensuring you reach your
+            destinations without hassle.</p>
         <div class="buttons">
             <a href="users/login">Login</a>
             <a href="users/register">Register</a>
+        </div>
+    </section>
+    <section class="contact" id="contact">
+        <div>
+            <h2>Contact Us</h2>
+            <p>Have questions or found an item? Reach out to us!</p>
+            <p>Email: <a href="mailto:support@findzy.com">support@findzy.com</a></p>
         </div>
     </section>
     <footer>
         &copy; 2025 Findzy. All rights reserved.
     </footer>
 </body>
+
 </html>

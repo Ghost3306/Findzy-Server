@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Findzy - Dashboard</title>
+    {% load static %}
+
+    <link rel="icon" type="image/jpeg" href="{% static 'findzy_logo2x.png' %}">
+
     <style>
         :root {
             --primary-color: #b443f1;
@@ -402,6 +406,7 @@
             margin-bottom: 20px;
         }
 
+    
         .card-button {
             align-self: flex-start;
             background-color: var(--primary-color);;
@@ -466,7 +471,7 @@
             <div class="card-content">
                 <h2 class="card-title"><a href="/dashboard/view/{{s.uid}}">{{s.name}}</a></h2>
                 <p class="card-description">{{s.description}}</p>
-                <button class="card-button">Learn More</button>
+                <button class="card-button">{{s.location}}</button>
             </div>
 
 

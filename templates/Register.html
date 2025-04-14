@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Page</title>
+    {% load static %}
+
+    <link rel="icon" type="image/jpeg" href="{% static 'findzy_logo2x.png' %}">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -145,9 +149,7 @@
         <p style="margin-top: 1em; font-size: 0.9rem;">
             Already have an account? <a href="/users/login" style="color: purple; font-weight: bold; text-decoration: none;">Login</a>
         </p>
-        <p style="margin-top: 1em; font-size: 0.9rem;">
-            <a href="register.html" style="color: rgb(253, 222, 21); font-weight: bold; text-decoration: underline;">Forgot Password</a>
-        </p>
+       
     </div>
 
     <script>

@@ -41,7 +41,7 @@ def login_user(request):
         if user_obj:
             login(request,user_obj)
             return redirect('/dashboard/home')
-        return render(request,'login.html',{'message','Invalid credentials!'})
+        return render(request,'login.html',{'message':'Invalid credentials!'})
 
     return render(request,'login.html')
 
@@ -119,16 +119,15 @@ def forgotpass(request,email_token):
 def launchforgot(request):
     if request.method=='POST':
         email = request.POST.get('email')
-        
-        #send email here
         try:
             obj = User.objects.get(email=email)
-            print(len(obj))
+            
             profile = Profile.objects.get(user=obj)
             print(profile.email_token,obj.email)
             send_forgot_mail(obj.email,profile.email_token)
             return render(request,'forgot.html',{'message':'Reset password link sent to you'})  
-        except: 
+        except Exception as e:
+            print(e) 
             return render(request,'forgot.html',{'message':'Please enter correct email!'})  
        
     return render(request,'forgot.html')                
